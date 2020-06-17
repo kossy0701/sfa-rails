@@ -26,6 +26,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'faker-japanese'
+  gem 'gimei'
   gem 'launchy'
   gem 'pry-byebug'
   gem 'pry-doc'
