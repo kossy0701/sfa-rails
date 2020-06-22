@@ -45,7 +45,10 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
       t.date :birthday, null: false
       t.boolean :sex, null: false
       t.boolean :administrator, null: false, default: false
+      t.boolean :disable, null: false, default: false
       t.integer :prefecture_id
+      t.references :tenant, null: false, foreign_key: true
+      t.references :manager
 
       ## Tokens
       t.text :tokens

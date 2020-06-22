@@ -29,4 +29,7 @@ RSpec.configure do |config|
       example.run
     end
   end
+
+  Dir[Rails.root.join('spec/supports/**/*.rb')].each { |f| require f }
+  config.include AuthenticationHelper, type: :request
 end

@@ -1,6 +1,7 @@
 class CreateCustomers < ActiveRecord::Migration[6.0]
   def change
     create_table :customers do |t|
+      t.references :tenant, null: false, foreign_key: true
       t.integer :contract_status, default: 0, null: false
       t.string :name, default: '', null: false
       t.string :postal_code, default: ''

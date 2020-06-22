@@ -1,39 +1,30 @@
 class CustomersController < ApplicationController
   before_action :authenticate_user!
+  before_action :ip_restriction!
   before_action :set_customer, only: [:show, :update, :destroy]
 
   def index
-    @customers = Customer.all
+    @customers = current_user_tenant.customers
   end
 
   def show
   end
 
   def create
-    @customer = Customer.new(customer_params)
+    @customer = current_user_tenant.customers.new(customer_params)
 
     if @customer.save
       render :show, status: :created
     else
-      render json: @customer.errors
+      render json: { errors: @customer.errors }, status: 400
     end
-  end
-
-  def update
-    if @customer.update(customer_params)
-      render :show, status: :ok, location: @customer
-    else
-      render json: @customer.errors, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @customer.destroy
   end
 
   private
+
     def set_customer
-      @customer = Customer.find(params[:id])
+      @customer = current_user_tenant.customers.find_by(id: params[:id])
+      raise NotFound unless @customer
     end
 
     def customer_params
