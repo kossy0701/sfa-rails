@@ -30,7 +30,6 @@ module SfaRails
     config.api_only = true
 
     config.generators do |g|
-      g.template_engine  :haml
       g.skip_routes      true
       g.test_framework   :rspec, fixture: false
       g.view_specs       false
