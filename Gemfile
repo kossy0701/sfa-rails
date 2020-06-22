@@ -14,6 +14,7 @@ gem 'google-api-client'
 gem 'whenever', require: false
 gem 'devise'
 gem 'devise_token_auth'
+gem 'ipaddress'
 
 group :production do
   gem 'unicorn', '5.5.1'
