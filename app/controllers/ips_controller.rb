@@ -1,9 +1,10 @@
 class IpsController < ApplicationController
   before_action :authenticate_user!
-  before_action :ip_restriction
-  before_action :set_ip, only: [:show, :update, :destroy]
+  before_action :ip_restriction!
+  before_action :set_ip, only: :show
 
   def index
+    raise Forbidden unless current_user.administrator
     @ips = current_user.tenant.ips
   end
 
@@ -11,34 +12,25 @@ class IpsController < ApplicationController
   end
 
   def create
+    raise Forbidden unless current_user.administrator
     @ip = Ip.new(ip_params)
 
     if @ip.save
-      render :show, status: :created, location: @ip
+      render :show, status: :created
     else
-      render json: @ip.errors, status: :unprocessable_entity
+      render json: { errors: @customer.errors }, status: 400
     end
-  end
-
-  def update
-    if @ip.update(ip_params)
-      render :show, status: :ok, location: @ip
-    else
-      render json: @ip.errors, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @ip.destroy
   end
 
   private
 
     def set_ip
-      @ip = Ip.find(params[:id])
+      raise Forbidden unless current_user.administrator
+      @ip = current_user_tenant.ips.find_by(id: params[:id])
+      raise NotFound unless @ip
     end
 
     def ip_params
-      params.permit(:content)
+      params.permit(:content).merge(tenant: current_user.tenant)
     end
 end
