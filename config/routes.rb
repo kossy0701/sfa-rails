@@ -4,7 +4,9 @@ Rails.application.routes.draw do
     resources :customers do
       resources :contacts
     end
-    resources :users, only: :show
+    resources :users, only: :show do
+      resources :daily_reports, only: [:index, :show, :create]
+    end
     resources :ips
 
     namespace :admin do

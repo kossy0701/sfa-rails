@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_21_053327) do
+ActiveRecord::Schema.define(version: 2020_06_24_120400) do
 
   create_table "contacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -42,6 +42,16 @@ ActiveRecord::Schema.define(version: 2020_06_21_053327) do
     t.index ["name"], name: "index_customers_on_name"
     t.index ["prefecture_id"], name: "index_customers_on_prefecture_id"
     t.index ["tenant_id"], name: "index_customers_on_tenant_id"
+  end
+
+  create_table "daily_reports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "problem"
+    t.string "improvement"
+    t.string "consultation"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_daily_reports_on_user_id"
   end
 
   create_table "ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -107,6 +117,7 @@ ActiveRecord::Schema.define(version: 2020_06_21_053327) do
   add_foreign_key "contacts", "customers"
   add_foreign_key "contacts", "users"
   add_foreign_key "customers", "tenants"
+  add_foreign_key "daily_reports", "users"
   add_foreign_key "ips", "tenants"
   add_foreign_key "users", "tenants"
 end
