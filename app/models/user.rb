@@ -3,8 +3,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   include DeviseTokenAuth::Concerns::User
 
+  enum sex: { male: false, female: true }
+
   belongs_to :tenant
   belongs_to :manager, class_name: 'User', optional: true
 
-  enum sex: { male: 0, female: 1 }
+  has_many :daily_reports, dependent: :destroy
+
 end
