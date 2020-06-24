@@ -5,7 +5,7 @@ RSpec.describe "Customer API", type: :request do
     describe '一般ユーザー' do
       context '自社テナント顧客の場合' do
         it '顧客の一覧を取得することができる' do
-          user = create :user
+          user = create :user, administrator: false
           customer = create :customer, tenant: user.tenant
           login user
 
@@ -18,7 +18,7 @@ RSpec.describe "Customer API", type: :request do
       end
       context '自社テナント顧客以外の場合' do
         it '顧客の一覧を取得することができない' do
-          user = create :user
+          user = create :user, administrator: false
           customer = create :customer
           login user
 
@@ -58,8 +58,7 @@ RSpec.describe "Customer API", type: :request do
     end
     describe '未ログイン' do
       it '顧客の一覧を取得することができない' do
-        user = create :user, administrator: true
-        customer = create :customer, tenant: user.tenant
+        create :customer
 
         get '/customers'
 
@@ -72,7 +71,7 @@ RSpec.describe "Customer API", type: :request do
     describe '一般ユーザー' do
       context '自社テナント顧客の場合' do
         it '顧客の詳細を取得することができる' do
-          user = create :user
+          user = create :user, administrator: false
           customer = create :customer, tenant: user.tenant
           login user
 
@@ -85,7 +84,7 @@ RSpec.describe "Customer API", type: :request do
       end
       context '自社テナント顧客以外の場合' do
         it '顧客の詳細を取得することができない' do
-          user = create :user
+          user = create :user, administrator: false
           customer = create :customer
           login user
 
@@ -123,8 +122,7 @@ RSpec.describe "Customer API", type: :request do
     end
     describe '未ログイン' do
       it '顧客の詳細を取得することができない' do
-        user = create :user, administrator: true
-        customer = create :customer, tenant: user.tenant
+        customer = create :customer
 
         get "/customers/#{customer.id}"
 
@@ -137,7 +135,7 @@ RSpec.describe "Customer API", type: :request do
     describe '一般ユーザー' do
       context '全てのパラメータが正しい場合' do
         it '顧客の作成をすることができる' do
-          user = create :user
+          user = create :user, administrator: false
           customer = create :customer, tenant: user.tenant
           login user
           params = attributes_for :customer
@@ -146,13 +144,23 @@ RSpec.describe "Customer API", type: :request do
 
           expect(response.status).to eq 201
           json = JSON.parse(response.body)
-          expect(json.keys.all?{|key| customer.attributes.keys.include?(key)}).to eq true
+          customer = Customer.last
+          expect(json['id']).to eq customer.id
+          expect(json['tenant_id']).to eq customer.tenant_id
+          expect(json['contract_status']).to eq customer.contract_status.to_s
+          expect(json['name']).to eq customer.name
+          expect(json['postal_code']).to eq customer.postal_code
+          expect(json['prefecture_id']).to eq customer.prefecture_id
+          expect(json['city']).to eq customer.city
+          expect(json['address1']).to eq customer.address1
+          expect(json['address2']).to eq customer.address2
+          expect(json['created_at']).to eq customer.created_at.iso8601(3)
+          expect(json['updated_at']).to eq customer.updated_at.iso8601(3)
         end
       end
       context 'パラメータが不正な場合' do
         it '顧客の作成をすることができない' do
-          user = create :user
-          customer = create :customer
+          user = create :user, administrator: false
           login user
           params = attributes_for :customer
           params[:postal_code] = '1234567'
@@ -168,8 +176,7 @@ RSpec.describe "Customer API", type: :request do
     describe '管理者' do
       context '全てのパラメータが正しい場合' do
         it '顧客の作成をすることができる' do
-          user = create :user
-          customer = create :customer, tenant: user.tenant
+          user = create :user, administrator: true
           login user
           params = attributes_for :customer
 
@@ -177,13 +184,23 @@ RSpec.describe "Customer API", type: :request do
 
           expect(response.status).to eq 201
           json = JSON.parse(response.body)
-          expect(json.keys.all?{|key| customer.attributes.keys.include?(key)}).to eq true
+          customer = Customer.last
+          expect(json['id']).to eq customer.id
+          expect(json['tenant_id']).to eq customer.tenant_id
+          expect(json['contract_status']).to eq customer.contract_status.to_s
+          expect(json['name']).to eq customer.name
+          expect(json['postal_code']).to eq customer.postal_code
+          expect(json['prefecture_id']).to eq customer.prefecture_id
+          expect(json['city']).to eq customer.city
+          expect(json['address1']).to eq customer.address1
+          expect(json['address2']).to eq customer.address2
+          expect(json['created_at']).to eq customer.created_at.iso8601(3)
+          expect(json['updated_at']).to eq customer.updated_at.iso8601(3)
         end
       end
       context 'パラメータが不正な場合' do
         it '顧客の作成をすることができない' do
-          user = create :user
-          customer = create :customer
+          user = create :user, administrator: true
           login user
           params = attributes_for :customer
           params[:postal_code] = '1234567'
@@ -198,144 +215,10 @@ RSpec.describe "Customer API", type: :request do
     end
     describe '未ログイン' do
       it '顧客の作成をすることができない' do
-        user = create :user, administrator: true
-        customer = create :customer, tenant: user.tenant
+        customer = create :customer
         params = attributes_for :customer
 
         post '/customers', params: params
-
-        expect(response.status).to eq 401
-      end
-    end
-  end
-
-  describe "PATCH /customers/:id" do
-    describe '一般ユーザー' do
-      context '全てのパラメータが正しい場合' do
-        it '顧客の更新をすることができる' do
-          user = create :user
-          customer = create :customer, tenant: user.tenant
-          login user
-          params = attributes_for :customer
-
-          patch "/customers/#{customer.id}", params: params
-
-          expect(response.status).to eq 200
-          json = JSON.parse(response.body)
-          expect(json.keys.all?{|key| customer.attributes.keys.include?(key)}).to eq true
-        end
-      end
-      context 'パラメータが不正な場合' do
-        it '顧客の更新をすることができない' do
-          user = create :user
-          customer = create :customer, tenant: user.tenant
-          login user
-          params = attributes_for :customer
-          params[:postal_code] = '1234567'
-
-          patch "/customers/#{customer.id}", params: params
-
-          expect(response.status).to eq 400
-        end
-      end
-    end
-    describe '管理者' do
-      context '全てのパラメータが正しい場合' do
-        it '顧客の更新をすることができる' do
-          user = create :user
-          customer = create :customer, tenant: user.tenant
-          login user
-          params = attributes_for :customer
-
-          patch "/customers/#{customer.id}", params: params
-
-          expect(response.status).to eq 200
-          json = JSON.parse(response.body)
-          expect(json.keys.all?{|key| customer.attributes.keys.include?(key)}).to eq true
-        end
-      end
-      context 'パラメータが不正な場合' do
-        it '顧客の更新をすることができない' do
-          user = create :user
-          customer = create :customer, tenant: user.tenant
-          login user
-          params = attributes_for :customer
-          params[:postal_code] = '1234567'
-
-          patch "/customers/#{customer.id}", params: params
-
-          expect(response.status).to eq 400
-        end
-      end
-    end
-    describe '未ログイン' do
-      it '顧客の更新をすることができない' do
-        user = create :user, administrator: true
-        customer = create :customer, tenant: user.tenant
-        params = attributes_for :customer
-
-        patch "/customers/#{customer.id}", params: params
-
-        expect(response.status).to eq 401
-      end
-    end
-  end
-
-  describe "DELETE /customers/:id" do
-    describe '一般ユーザー' do
-      context '自社テナント顧客の場合' do
-        it '顧客を削除することができる' do
-          user = create :user
-          customer = create :customer, tenant: user.tenant
-          login user
-
-          delete "/customers/#{customer.id}"
-
-          expect(response.status).to eq 204
-        end
-      end
-      context '自社テナント顧客以外の場合' do
-        it '顧客を削除することができない' do
-          user = create :user
-          customer = create :customer
-          login user
-
-          delete "/customers/#{customer.id}"
-
-          expect(response.status).to eq 404
-        end
-      end
-    end
-    describe '管理者' do
-      context '自社テナント顧客の場合' do
-        it '顧客を削除することができる' do
-          user = create :user, administrator: true
-          customer = create :customer, tenant: user.tenant
-          login user
-
-          delete "/customers/#{customer.id}"
-
-          expect(response.status).to eq 204
-        end
-      end
-      context '自社テナント顧客以外の場合' do
-        it '顧客を削除することができない' do
-          user = create :user, administrator: true
-          customer = create :customer
-          login user
-
-          delete "/customers/#{customer.id}"
-
-          expect(response.status).to eq 404
-        end
-      end
-    end
-    describe '未ログイン' do
-      it '顧客の削除をすることができない' do
-        user = create :user, administrator: true
-        customer = create :customer, tenant: user.tenant
-
-        delete "/customers/#{customer.id}"
 
         expect(response.status).to eq 401
       end

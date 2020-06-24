@@ -110,7 +110,7 @@ RSpec.describe "Ip API", type: :request do
 
   describe 'POST /ips' do
     describe '一般ユーザー' do
-      it 'IPアドレスの詳細を取得することができない' do
+      it 'IPアドレス制限を設定することができない' do
         user = create :user, administrator: false
         login user
         params = attributes_for :ip
@@ -121,7 +121,7 @@ RSpec.describe "Ip API", type: :request do
       end
     end
     describe '管理者' do
-      it 'IPアドレスの詳細を取得することができる' do
+      it 'IPアドレス制限を設定することができる' do
         user = create :user, administrator: true
         login user
         params = attributes_for :ip
@@ -130,7 +130,12 @@ RSpec.describe "Ip API", type: :request do
 
         expect(response.status).to eq 201
         json = JSON.parse(response.body)
-        expect(json.keys.all?{|key| params.keys.include?(key)}).to eq true
+        ip = Ip.last
+        expect(json['id']).to eq ip.id
+        expect(json['tenant_id']).to eq ip.tenant_id
+        expect(json['content']).to eq ip.content.address
+        expect(json['created_at']).to eq ip.created_at.iso8601(3)
+        expect(json['updated_at']).to eq ip.updated_at.iso8601(3)
       end
     end
   end
