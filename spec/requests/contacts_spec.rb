@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Contact API', type: :request do
-  describe '/customers/:id/contacts' do
+  describe 'GET /customers/:id/contacts' do
     describe '一般ユーザー' do
       context '自社テナント顧客の場合' do
         it '顧客に紐づいたコンタクト履歴の一覧を取得できる' do
@@ -60,7 +60,7 @@ RSpec.describe 'Contact API', type: :request do
     end
   end
 
-  describe '/customers/:id/contacts/:id' do
+  describe 'GET /customers/:id/contacts/:id' do
     describe '一般ユーザー' do
       context '自社テナント顧客の場合' do
         it '顧客に紐づいたコンタクト履歴の一覧を取得できる' do
@@ -119,7 +119,7 @@ RSpec.describe 'Contact API', type: :request do
     end
   end
 
-  describe '/customers/:id/contacts' do
+  describe 'POST /customers/:id/contacts' do
     describe '一般ユーザー' do
       context '自社テナント顧客の場合' do
         it '顧客に紐づいたコンタクト履歴を作成できる' do
