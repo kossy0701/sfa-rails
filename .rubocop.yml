@@ -1,5 +1,9 @@
+require:
+  - rubocop-performance
+
 AllCops:
   Exclude:
+    - app/controllers/devise_token_auth/*
     - bin/*
     - vendor/**/*
     - db/**/*
@@ -9,14 +13,21 @@ AllCops:
     - config/environments/**/*
     - config/initializers/**/*
 Metrics/MethodLength:
-  Max: 20
+  Max: 30
 Metrics/LineLength:
   Max: 150
 Metrics/AbcSize:
-  Max: 20
+  Max: 30
 Style/Documentation:
   Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
+Style/EvalWithLocation:
+  Enabled: false
+Naming/ConstantName:
+  Enabled: false
+MethodDefParentheses:
+  EnforcedStyle: require_parentheses
+

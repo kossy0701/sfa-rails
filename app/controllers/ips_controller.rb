@@ -5,14 +5,15 @@ class IpsController < ApplicationController
 
   def index
     raise Forbidden unless current_user.administrator
+
     @ips = current_user.tenant.ips
   end
 
-  def show
-  end
+  def show; end
 
   def create
     raise Forbidden unless current_user.administrator
+
     @ip = Ip.new(ip_params)
 
     if @ip.save
@@ -24,13 +25,14 @@ class IpsController < ApplicationController
 
   private
 
-    def set_ip
-      raise Forbidden unless current_user.administrator
-      @ip = current_user_tenant.ips.find_by(id: params[:id])
-      raise NotFound unless @ip
-    end
+  def set_ip
+    raise Forbidden unless current_user.administrator
 
-    def ip_params
-      params.permit(:content).merge(tenant: current_user.tenant)
-    end
+    @ip = current_user_tenant.ips.find_by(id: params[:id])
+    raise NotFound unless @ip
+  end
+
+  def ip_params
+    params.permit(:content).merge(tenant: current_user.tenant)
+  end
 end

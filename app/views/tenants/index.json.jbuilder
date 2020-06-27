@@ -1,1 +1,1 @@
-json.array! @tenants, partial: "tenants/tenant", as: :tenant
+json.array! @tenants, partial: 'tenants/tenant', as: :tenant

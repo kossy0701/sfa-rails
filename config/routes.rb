@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth'
+  mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+    sessions: 'devise_token_auth/sessions'
+  }
   scope format: 'json' do
     resources :customers do
       resources :contacts
