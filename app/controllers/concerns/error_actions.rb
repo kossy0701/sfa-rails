@@ -3,12 +3,12 @@ module ErrorActions
 
   def error_json(exception)
     {
-      type:       'error',
-      status:     Rack::Utils.status_code(exception.status),
-      code:       exception.code,
-      message:    exception.message,
-      errors:     exception.errors,
-      info:       exception.info
+      type: 'error',
+      status: Rack::Utils.status_code(exception.status),
+      code: exception.code,
+      message: exception.message,
+      errors: exception.errors,
+      info: exception.info
     }.to_json
   end
 

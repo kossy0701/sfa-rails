@@ -2,9 +2,9 @@ class Contact < ApplicationRecord
   belongs_to :user
   belongs_to :customer
 
-  enum way: [:phone, :email, :appoint]
-  enum purpose: [:proposal, :contract, :other]
-  enum target: [:president, :manager, :staff]
+  enum way: %i[phone email appoint]
+  enum purpose: %i[proposal contract other]
+  enum target: %i[president manager staff]
 
   validates :contacted_at, presence: true
   validates :way, presence: true

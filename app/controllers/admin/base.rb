@@ -3,7 +3,7 @@ class Admin::Base < ApplicationController
 
   private
 
-    def authenticate_admin!
-      raise Forbidden unless current_user && current_user.administrator?
-    end
+  def authenticate_admin!
+    raise Forbidden unless current_user&.administrator?
+  end
 end

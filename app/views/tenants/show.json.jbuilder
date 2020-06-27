@@ -1,1 +1,1 @@
-json.partial! "tenants/tenant", tenant: @tenant
+json.partial! 'tenants/tenant', tenant: @tenant

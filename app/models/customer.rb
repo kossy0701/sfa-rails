@@ -6,7 +6,7 @@ class Customer < ApplicationRecord
 
   has_many :contacts, dependent: :destroy
 
-  enum contract_status: [:existing, :prospect, :dormant] # 既存客/見込み客/休眠客
+  enum contract_status: %i[existing prospect dormant]
 
   delegate :prefecture_name, to: :prefecture
 

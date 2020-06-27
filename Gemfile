@@ -3,26 +3,26 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.3'
 
-gem 'rails', '~> 6.0.3', '>= 6.0.3.1'
-gem 'mysql2', '>= 0.4.4'
-gem 'puma', '~> 4.1'
-gem 'jbuilder', '~> 2.7'
-gem 'bootsnap', '>= 1.4.2', require: false
-gem 'rack-cors'
 gem 'active_hash'
-gem 'google-api-client'
-gem 'whenever', require: false
+gem 'bootsnap', '>= 1.4.2', require: false
 gem 'devise'
 gem 'devise_token_auth'
+gem 'google-api-client'
 gem 'ipaddress'
+gem 'jbuilder', '~> 2.7'
+gem 'mysql2', '>= 0.4.4'
+gem 'puma', '~> 4.1'
+gem 'rack-cors'
+gem 'rails', '~> 6.0.3', '>= 6.0.3.1'
+gem 'whenever', require: false
 
 group :production do
   gem 'unicorn', '5.5.1'
 end
 
 group :development, :test do
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'awesome_print'
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'faker'
@@ -35,6 +35,7 @@ group :development, :test do
   gem 'pry-stack_explorer'
   gem 'rspec-rails'
   gem 'rubocop'
+  gem 'rubocop-performance', require: false
 
   # auto deploy
   gem 'capistrano'
@@ -45,12 +46,12 @@ group :development, :test do
 end
 
 group :development do
-  gem 'listen', '~> 3.2'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'brakeman', require: false
   gem 'bullet'
+  gem 'listen', '~> 3.2'
   gem 'rails-erd'
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

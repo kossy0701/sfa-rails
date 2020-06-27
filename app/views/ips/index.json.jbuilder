@@ -1,1 +1,1 @@
-json.array! @ips, partial: "ips/ip", as: :ip
+json.array! @ips, partial: 'ips/ip', as: :ip

@@ -1,1 +1,1 @@
-json.partial! "ips/ip", ip: @ip
+json.partial! 'ips/ip', ip: @ip

@@ -1,32 +1,26 @@
 module Errors
   # 4xx / 5xx errors
-  HTTPResponseErrors = {
+  HttpResponseErrors = {
     # code:                status
-    bad_request:           400, # 400 BadRequest
-    unauthorized:          401, # 401 Unauthorized
-    forbidden:             403, # 403 Forbidden
-    not_found:             404, # 404 NotFound
-    method_not_allowed:    405, # 405 Method Not Allowed
-    internal_server_error: 500, # 500 InternalServerError
-  }
+    bad_request: 400, # 400 BadRequest
+    unauthorized: 401, # 401 Unauthorized
+    forbidden: 403, # 403 Forbidden
+    not_found: 404, # 404 NotFound
+    method_not_allowed: 405, # 405 Method Not Allowed
+    internal_server_error: 500 # 500 InternalServerError
+  }.freeze
 
-
-  # base of HTTPResponseErrors class
-  class HTTPResponseError < StandardError
-
+  # base of HttpResponseErrors class
+  class HttpResponseError < StandardError
     attr_accessor :code, :message, :errors, :info
 
     def initialize(args = {})
-      super
+      return unless args.is_a?(Hash)
 
-      if args.is_a? Hash
-        @code    = args[:code]
-        @message = args[:message]
-        @errors  = args[:errors]
-        @info    = args[:info]
-      end
-
-      self
+      @code    = args[:code]
+      @message = args[:message]
+      @errors  = args[:errors]
+      @info    = args[:info]
     end
 
     def capitalize_with_space(str, delimiter = '_')
@@ -34,11 +28,11 @@ module Errors
     end
   end
 
-  HTTPResponseErrors.each do |code ,status|
-    class_eval <<-EOS
-      class #{code.to_s.camelize} < HTTPResponseError
+  HttpResponseErrors.each do |code, status|
+    class_eval <<-RUBY
+      class #{code.to_s.camelize} < HttpResponseError
         def status
-          HTTPResponseErrors[:#{code}]
+          HttpResponseErrors[:#{code}]
         end
 
         def code
@@ -49,6 +43,6 @@ module Errors
           @message || ("#{status} " + capitalize_with_space("#{code}"))
         end
       end
-    EOS
+    RUBY
   end
 end
