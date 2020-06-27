@@ -10,4 +10,7 @@ class User < ActiveRecord::Base
 
   has_many :daily_reports, dependent: :destroy
 
+  def full_name
+    "#{last_name} #{first_name}"
+  end
 end
