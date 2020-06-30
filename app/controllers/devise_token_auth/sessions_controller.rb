@@ -104,7 +104,7 @@ module DeviseTokenAuth
     end
 
     def render_create_error_forbidden
-      render_error(403, I18n.t('devise_token_auth.sessions.not_confirmed', email: @resource.email))
+      render_error(403, I18n.t('devise_token_auth.sessions.forbidden'))
     end
 
     def render_create_error_account_locked

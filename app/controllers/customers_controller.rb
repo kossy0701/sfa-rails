@@ -1,3 +1,5 @@
+require 'csv'
+
 class CustomersController < ApplicationController
   before_action :authenticate_user!
   before_action :ip_restriction!
@@ -16,6 +18,12 @@ class CustomersController < ApplicationController
       render :show, status: :created
     else
       render json: { errors: @customer.errors }, status: 400
+    end
+  end
+
+  def download
+    respond_to do |format|
+      format.all { send_data Customer.generate_csv(current_user_tenant.customers) }
     end
   end
 
