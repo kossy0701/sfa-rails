@@ -1,3 +1,5 @@
+require 'csv'
+
 class Customer < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
 
@@ -16,4 +18,23 @@ class Customer < ApplicationRecord
   validates :prefecture_id, presence: true, length: { minimum: 0, maximum: 47 }
   validates :city, presence: true
   validates :address1, presence: true
+
+  def self.generate_csv(customers)
+    data = %w[ID 属性 名称 郵便番号 都道府県 市町村 住所1 住所2]
+    CSV.generate(headers: true) do |csv|
+      csv << data
+      customers.each do |customer|
+        csv << [
+          customer.id,
+          { existing: '既存顧客', prospect: '見込み顧客', dormant: '休眠顧客' }[customer.contract_status.to_sym],
+          customer.name,
+          customer.postal_code,
+          customer.prefecture.prefecture_name,
+          customer.city,
+          customer.address1,
+          customer.address2
+        ]
+      end
+    end
+  end
 end

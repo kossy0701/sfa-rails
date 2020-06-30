@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   }
   scope format: 'json' do
     resources :customers do
+      get 'download', on: :collection
       resources :contacts
     end
     resources :users, only: :show do
