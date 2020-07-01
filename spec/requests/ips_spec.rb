@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Ip API", type: :request do
+RSpec.describe 'Ip API', type: :request do
   describe 'GET /ips' do
     describe '一般ユーザー' do
       context '自社テナントIPアドレスの場合' do
@@ -36,8 +36,13 @@ RSpec.describe "Ip API", type: :request do
           get '/ips'
 
           expect(response.status).to eq 200
-          ip_json = JSON.parse(response.body).first
-          expect(ip_json.keys.all?{|key| ip.attributes.keys.include?(key)}).to eq true
+          json = JSON.parse(response.body).first
+          expect(json['id']).to eq ip.id
+          expect(json['tenant_id']).to eq ip.tenant_id
+          expect(json['content']).to eq ip.content.address
+          expect(json['created_at']).to eq ip.created_at.iso8601(3)
+          expect(json['updated_at']).to eq ip.updated_at.iso8601(3)
+          expect(json['setted_at']).to eq ip.setted_at
         end
       end
       context '自社テナントIPアドレスでない場合' do
@@ -91,7 +96,12 @@ RSpec.describe "Ip API", type: :request do
 
           expect(response.status).to eq 200
           json = JSON.parse(response.body)
-          expect(json.keys.all?{|key| ip.attributes.keys.include?(key)}).to eq true
+          expect(json['id']).to eq ip.id
+          expect(json['tenant_id']).to eq ip.tenant_id
+          expect(json['content']).to eq ip.content.address
+          expect(json['created_at']).to eq ip.created_at.iso8601(3)
+          expect(json['updated_at']).to eq ip.updated_at.iso8601(3)
+          expect(json['setted_at']).to eq ip.setted_at
         end
       end
       context '自社テナントIPアドレスでない場合' do
@@ -115,7 +125,7 @@ RSpec.describe "Ip API", type: :request do
         login user
         params = attributes_for :ip
 
-        post "/ips", params: params
+        post '/ips', params: params
 
         expect(response.status).to eq 403
       end
@@ -126,7 +136,7 @@ RSpec.describe "Ip API", type: :request do
         login user
         params = attributes_for :ip
 
-        post "/ips", params: params
+        post '/ips', params: params
 
         expect(response.status).to eq 201
         json = JSON.parse(response.body)
@@ -136,6 +146,67 @@ RSpec.describe "Ip API", type: :request do
         expect(json['content']).to eq ip.content.address
         expect(json['created_at']).to eq ip.created_at.iso8601(3)
         expect(json['updated_at']).to eq ip.updated_at.iso8601(3)
+      end
+    end
+  end
+
+  describe 'PUT /ips/:id' do
+    describe '一般ユーザー' do
+      it 'IPアドレス制限を更新することができない' do
+        user = create :user, administrator: false
+        ip = create :ip, tenant: user.tenant, content: '127.0.0.1'
+        login user
+        params = attributes_for :ip
+
+        put "/ips/#{ip.id}", params: params
+
+        expect(response.status).to eq 403
+      end
+    end
+    describe '管理者' do
+      it 'IPアドレス制限を更新することができる' do
+        user = create :user, administrator: true
+        ip = create :ip, tenant: user.tenant, content: '127.0.0.1'
+        login user
+        params = attributes_for :ip
+
+        put "/ips/#{ip.id}", params: params
+
+        expect(response.status).to eq 200
+        json = JSON.parse(response.body)
+        ip = Ip.last
+        expect(json['id']).to eq ip.id
+        expect(json['tenant_id']).to eq ip.tenant_id
+        expect(json['content']).to eq ip.content.address
+        expect(json['created_at']).to eq ip.created_at.iso8601(3)
+        expect(json['updated_at']).to eq ip.updated_at.iso8601(3)
+      end
+    end
+  end
+
+  describe 'DELETE /ips/:id' do
+    describe '一般ユーザー' do
+      it 'IPアドレス制限を更新することができない' do
+        user = create :user, administrator: false
+        ip = create :ip, tenant: user.tenant
+        login user
+        params = attributes_for :ip
+
+        delete "/ips/#{ip.id}"
+
+        expect(response.status).to eq 403
+      end
+    end
+    describe '管理者' do
+      it 'IPアドレス制限を更新することができる' do
+        user = create :user, administrator: true
+        ip = create :ip, tenant: user.tenant, content: '127.0.0.1'
+        login user
+        params = attributes_for :ip
+
+        delete "/ips/#{ip.id}"
+
+        expect(response.status).to eq 204
       end
     end
   end
