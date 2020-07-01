@@ -1,7 +1,7 @@
 class IpsController < ApplicationController
   before_action :authenticate_user!
   before_action :ip_restriction!
-  before_action :set_ip, only: :show
+  before_action :set_ip, only: [:show, :update, :destroy]
 
   def index
     raise Forbidden unless current_user.administrator
@@ -21,6 +21,24 @@ class IpsController < ApplicationController
     else
       render json: { errors: @customer.errors }, status: 400
     end
+  end
+
+  def update
+    raise Forbidden unless current_user.administrator
+
+    if @ip.update(ip_params)
+      render :show, status: :ok
+    else
+      render json: { errors: @customer.errors }, status: 400
+    end
+  end
+
+  def destroy
+    raise Forbidden unless current_user.administrator
+
+    @ip.destroy
+
+    head :no_content
   end
 
   private
