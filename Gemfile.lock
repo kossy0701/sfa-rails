@@ -287,6 +287,7 @@ GEM
     ruby-graphviz (1.2.5)
       rexml
     ruby-progressbar (1.10.1)
+    rubyzip (2.3.0)
     signet (0.14.0)
       addressable (~> 2.3)
       faraday (>= 0.17.3, < 2.0)
@@ -365,6 +366,7 @@ DEPENDENCIES
   rspec-rails
   rubocop
   rubocop-performance
+  rubyzip
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
