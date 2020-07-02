@@ -1,5 +1,3 @@
-require 'csv'
-
 class CustomersController < ApplicationController
   before_action :authenticate_user!
   before_action :ip_restriction!
@@ -25,6 +23,14 @@ class CustomersController < ApplicationController
     respond_to do |format|
       format.all { send_data Customer.generate_csv(current_user_tenant.customers) }
     end
+  end
+
+  def download_zip
+    zip_file = Customer.generate_zip(current_user_tenant.customers)
+    respond_to do |format|
+      format.all { send_data(File.read(zip_file), type: 'application/zip', filename: '顧客一覧.zip') }
+    end
+    File.delete(zip_file)
   end
 
   private
