@@ -3,6 +3,49 @@
 ## 何を解決したいのか
 - 営業活動の効率化
 
+## アプリ概要
+
+簡易的な顧客管理アプリをSPAで作りました。フロントエンドはAngular9で実装しています。
+
+## 使用技術
+- Ruby 2.6.3
+- Rails 6.0.3
+- MySQL 5.7.23
+
+## 実装機能
+- ログイン・ログアウト機能(devise_token_auth)
+- 顧客管理(CRUD)機能
+- 顧客接触履歴管理(CRUD)機能
+- IPアドレス制限機能
+- 業務日報(CRUD)機能
+- スケジュル管理(CRUD)機能
+- 業務日報コメント機能(CRUD)機能
+- 管理者機能(namespace)
+- CSVダウンロード機能
+- ZIPダウンロード機能
+- 各種機能制限(CRUD)機能
+
+## テスト・継続的インテグレーション
+- Rspec(models, requests, systems, decorators)
+- rubocop
+- dependabot
+
+## 環境構築手順
+
+```
+$ git clone https://github.com/kossy0701/sfa-rails.git
+
+$ cd sfa-rails
+
+$ bundle
+
+$ bundle exec rails db:create
+
+$ bundle exec rails db:migrate
+
+$ bundle exec rails db:seed
+```
+
 ## テーブル設計
 
 ### Tenantsテーブル
