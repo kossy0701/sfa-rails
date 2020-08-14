@@ -1,13 +1,14 @@
 0.upto(9) do |idx|
   gimei = Gimei.name
-  sex = [0, 1].sample
+  sex = [:male, :female].sample
   gimei =
-    if sex.zero?
+    if sex == :male
       Gimei.male
     else
       Gimei.female
     end
   User.create(
+    tenant: Tenant.first,
     last_name: gimei.last.kanji,
     first_name: gimei.first.kanji,
     last_name_kana: gimei.last.katakana,

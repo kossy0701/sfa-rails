@@ -1,16 +1,12 @@
 module Errors
-  # 4xx / 5xx errors
   HttpResponseErrors = {
-    # code:                status
-    bad_request: 400, # 400 BadRequest
-    unauthorized: 401, # 401 Unauthorized
-    forbidden: 403, # 403 Forbidden
-    not_found: 404, # 404 NotFound
-    method_not_allowed: 405, # 405 Method Not Allowed
-    internal_server_error: 500 # 500 InternalServerError
+    bad_request: 400,
+    unauthorized: 401,
+    forbidden: 403,
+    not_found: 404,
+    internal_server_error: 500
   }.freeze
 
-  # base of HttpResponseErrors class
   class HttpResponseError < StandardError
     attr_accessor :code, :message, :errors, :info
 

@@ -17,7 +17,8 @@ Rails.application.routes.draw do
       resources :customers do
         resources :contacts
       end
-      resources :users
+      resources :users, only: [:index, :show]
+      post 'users/import', to: 'users#import'
     end
   end
 end
