@@ -22,7 +22,6 @@ Bundler.require(*Rails.groups)
 module SfaRails
   class Application < Rails::Application
     config.load_defaults 6.0
-    config.paths.add 'lib', eager_load: true
     config.generators.system_tests = nil
     config.time_zone = 'Tokyo'
     config.i18n.default_locale = :ja
