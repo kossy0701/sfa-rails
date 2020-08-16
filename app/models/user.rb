@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
 
   delegate :prefecture_name, to: :prefecture
 
+  has_one_attached :image
+
   def full_name
     "#{last_name} #{first_name}"
   end
@@ -33,5 +35,9 @@ class User < ActiveRecord::Base
       users << user
     end
     insert_all users
+  end
+
+  def encoded_image
+    "data:image/png;base64,#{Base64.encode64(image.download)}" if image.attached?
   end
 end
