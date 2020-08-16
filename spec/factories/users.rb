@@ -18,6 +18,13 @@ FactoryBot.define do
     prefecture_id    { rand(1..48) }
 
     association :tenant, factory: :tenant
+
+    after(:build) do |user|
+      user.image =
+        Rack::Test::UploadedFile.new(
+          Rails.root.join('spec', 'fixtures', 'files', 'test.png'), 'image/png'
+        )
+    end
   end
 end
 
