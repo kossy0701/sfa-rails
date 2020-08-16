@@ -8,7 +8,7 @@ class SlackClient
   def initialize(**args)
     @username = args[:username]
     @channel = args[:channel]
-    @icon_emoji = args[:icon]
+    @icon = args[:icon]
     @text = args[:text]
     @attachments = args[:attachments]
   end
