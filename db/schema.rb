@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_24_120400) do
+ActiveRecord::Schema.define(version: 2020_08_15_130024) do
 
   create_table "contacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -62,6 +62,18 @@ ActiveRecord::Schema.define(version: 2020_06_24_120400) do
     t.index ["tenant_id"], name: "index_ips_on_tenant_id"
   end
 
+  create_table "schedules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.date "date", null: false
+    t.time "start_time", null: false
+    t.time "end_time", null: false
+    t.string "subject", null: false
+    t.text "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_schedules_on_user_id"
+  end
+
   create_table "tenants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.string "postal_code", null: false
@@ -94,7 +106,6 @@ ActiveRecord::Schema.define(version: 2020_06_24_120400) do
     t.string "first_name", null: false
     t.string "last_name_kana", null: false
     t.string "first_name_kana", null: false
-    t.string "image"
     t.string "email", null: false
     t.date "birthday", null: false
     t.boolean "sex", null: false
@@ -119,5 +130,6 @@ ActiveRecord::Schema.define(version: 2020_06_24_120400) do
   add_foreign_key "customers", "tenants"
   add_foreign_key "daily_reports", "users"
   add_foreign_key "ips", "tenants"
+  add_foreign_key "schedules", "users"
   add_foreign_key "users", "tenants"
 end
