@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   belongs_to_active_hash :prefecture
 
   has_many :daily_reports, dependent: :destroy
+  has_many :schedules, dependent: :destroy
 
   delegate :prefecture_name, to: :prefecture
 

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     end
     resources :users, only: :show do
       resources :daily_reports, only: [:index, :show, :create]
+      resources :schedules
     end
     resources :ips
 
