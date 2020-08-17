@@ -16,6 +16,7 @@ gem 'rack-cors'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.1'
 gem 'rubyzip'
 gem 'whenever', require: false
+gem 'month'
 
 group :production do
   gem 'unicorn', '5.5.1'

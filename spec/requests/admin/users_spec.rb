@@ -22,7 +22,20 @@ RSpec.describe "Admin::User API", type: :request do
 
           expect(response.status).to eq 200
           user_json = JSON.parse(response.body).first
-          expect(user_json.keys.all?{|key| user.attributes.keys.include?(key)}).to eq true
+          expect(user_json['id']).to eq user.id
+          expect(user_json['last_name']).to eq user.last_name
+          expect(user_json['first_name']).to eq user.first_name
+          expect(user_json['last_name_kana']).to eq user.last_name_kana
+          expect(user_json['first_name_kana']).to eq user.first_name_kana
+          expect(user_json['email']).to eq user.email
+          expect(user_json['birthday']).to eq user.birthday.to_s
+          expect(user_json['sex']).to eq user.sex
+          expect(user_json['administrator']).to eq user.administrator
+          expect(user_json['disable']).to eq user.disable
+          expect(user_json['prefecture_id']).to eq user.prefecture_id
+          expect(user_json['tenant_id']).to eq user.tenant_id
+          expect(user_json['manager_id']).to eq user.manager_id
+          expect(user_json['image']).to eq user.encoded_image
         end
       end
       context '自社テナントのユーザー以外の場合' do
@@ -61,7 +74,20 @@ RSpec.describe "Admin::User API", type: :request do
 
           expect(response.status).to eq 200
           json = JSON.parse(response.body)
-          expect(json.keys.all?{|key| user.attributes.keys.include?(key)}).to eq true
+          expect(json['id']).to eq user.id
+          expect(json['last_name']).to eq user.last_name
+          expect(json['first_name']).to eq user.first_name
+          expect(json['last_name_kana']).to eq user.last_name_kana
+          expect(json['first_name_kana']).to eq user.first_name_kana
+          expect(json['email']).to eq user.email
+          expect(json['birthday']).to eq user.birthday.to_s
+          expect(json['sex']).to eq user.sex
+          expect(json['administrator']).to eq user.administrator
+          expect(json['disable']).to eq user.disable
+          expect(json['prefecture_id']).to eq user.prefecture_id
+          expect(json['tenant_id']).to eq user.tenant_id
+          expect(json['manager_id']).to eq user.manager_id
+          expect(json['image']).to eq user.encoded_image
         end
       end
       context '自社テナントのユーザー以外の場合' do

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     end
     resources :users, only: :show do
       resources :daily_reports, only: [:index, :show, :create]
+      resources :schedules
     end
     resources :ips
 
@@ -17,7 +18,8 @@ Rails.application.routes.draw do
       resources :customers do
         resources :contacts
       end
-      resources :users
+      resources :users, only: [:index, :show]
+      post 'users/import', to: 'users#import'
     end
   end
 end
