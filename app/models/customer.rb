@@ -22,10 +22,10 @@ class Customer < ApplicationRecord
   validates :city, presence: true
   validates :address1, presence: true
 
-  def self.generate_csv(customers)
+  def self.generate_csv
     CSV.generate(headers: true) do |csv|
       csv << CSV_HEADERS
-      customers.each do |customer|
+      tenant.customers.each do |customer|
         csv << [
           customer.id,
           { existing: '既存顧客', prospect: '見込み顧客', dormant: '休眠顧客' }[customer.contract_status.to_sym],
@@ -40,13 +40,13 @@ class Customer < ApplicationRecord
     end
   end
 
-  def self.generate_zip(customers)
+  def self.generate_zip
     zipfile_name = "#{Rails.root}/tmp/顧客一覧.zip"
     Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
       dir_path = Pathname.new(Dir.mktmpdir + '/顧客一覧.csv')
       CSV.open(dir_path, 'wb', headers: true) do |csv|
         csv << CSV_HEADERS
-        customers.each do |customer|
+        tenant.customers.each do |customer|
           csv << [
             customer.id,
             { existing: '既存顧客', prospect: '見込み顧客', dormant: '休眠顧客' }[customer.contract_status.to_sym],

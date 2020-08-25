@@ -21,12 +21,12 @@ class CustomersController < ApplicationController
 
   def download
     respond_to do |format|
-      format.all { send_data Customer.generate_csv(current_user_tenant.customers) }
+      format.all { send_data Customer.generate_csv }
     end
   end
 
   def download_zip
-    zip_file = Customer.generate_zip(current_user_tenant.customers)
+    zip_file = Customer.generate_zip
     respond_to do |format|
       format.all { send_data(File.read(zip_file), type: 'application/zip', filename: '顧客一覧.zip') }
     end
