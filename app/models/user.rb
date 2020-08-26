@@ -40,4 +40,8 @@ class User < ActiveRecord::Base
   def encoded_image
     "data:image/png;base64,#{Base64.encode64(image.download)}" if image.attached?
   end
+
+  def pusher_channel
+    "private-#{Rails.env}-user-#{id}"
+  end
 end
