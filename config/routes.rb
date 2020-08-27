@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     sessions: 'devise_token_auth/sessions'
   }
   scope format: 'json' do
+    post '/pusher/auth', to: 'pusher#auth'
+
     resources :customers do
       get 'download', on: :collection
       get 'download_zip', on: :collection
