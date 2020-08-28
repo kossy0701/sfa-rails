@@ -358,6 +358,7 @@ DEPENDENCIES
   google-api-client
   ipaddress
   jbuilder (~> 2.7)
+  jwt
   launchy
   listen (~> 3.2)
   month
