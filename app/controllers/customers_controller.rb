@@ -33,6 +33,13 @@ class CustomersController < ApplicationController
     File.delete(zip_file)
   end
 
+  def generate_zoom_url
+    # zoomのURLを生成して返す
+    # アクティビティのログを残す
+
+    render json: { zoom_url: ZoomClient.generate_url(params.permit(:topic, :duration, :agenda)) }
+  end
+
   private
 
   def set_customer

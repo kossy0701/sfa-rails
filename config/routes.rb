@@ -10,6 +10,9 @@ Rails.application.routes.draw do
       get 'download_zip', on: :collection
       resources :contacts
     end
+
+    get 'customers/generate_zoom_url', to: 'customers#generate_zoom_url'
+
     resources :users, only: :show do
       resources :daily_reports, only: [:index, :show, :create]
       resources :schedules
