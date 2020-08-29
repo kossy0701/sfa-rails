@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_16_053728) do
+ActiveRecord::Schema.define(version: 2020_08_28_112030) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -31,6 +31,20 @@ ActiveRecord::Schema.define(version: 2020_08_16_053728) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "activity_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "tenant_id", null: false
+    t.text "action", null: false
+    t.string "performer", null: false
+    t.string "performer_type", null: false
+    t.string "ip_address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ip_address"], name: "index_activity_logs_on_ip_address"
+    t.index ["performer"], name: "index_activity_logs_on_performer"
+    t.index ["performer_type"], name: "index_activity_logs_on_performer_type"
+    t.index ["tenant_id"], name: "index_activity_logs_on_tenant_id"
   end
 
   create_table "contacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -147,6 +161,7 @@ ActiveRecord::Schema.define(version: 2020_08_16_053728) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activity_logs", "tenants"
   add_foreign_key "contacts", "customers"
   add_foreign_key "contacts", "users"
   add_foreign_key "customers", "tenants"

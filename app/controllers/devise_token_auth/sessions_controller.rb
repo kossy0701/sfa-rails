@@ -1,7 +1,11 @@
 module DeviseTokenAuth
   class SessionsController < DeviseTokenAuth::ApplicationController
-    before_action :set_user_by_token, only: [:destroy]
-    after_action :reset_session, only: [:destroy]
+    before_action :set_user_by_token, only: :destroy
+    before_action :prepare_create_logout_log, only: :destroy
+
+    after_action :reset_session, only: :destroy
+    after_action :login_activity_log, only: :create
+    after_action :logout_activity_log, only: :destroy
 
     def new
       render_new_error
@@ -129,6 +133,18 @@ module DeviseTokenAuth
 
     def resource_params
       params.permit(*params_for_resource(:sign_in))
+    end
+
+    def login_activity_log
+      ActivityLog.create!(tenant: @resource.tenant, action: { text: 'ログイン', operate: nil }, performer: @resource.full_name, performer_type: 'User', ip_address: request.remote_ip)
+    end
+
+    def prepare_create_logout_log
+      @old_resource = @resource
+    end
+
+    def logout_activity_log
+      ActivityLog.create!(tenant: @old_resource.tenant, action: { text: 'ログアウト', operate: nil }, performer: @old_resource.full_name, performer_type: 'User')
     end
   end
 end

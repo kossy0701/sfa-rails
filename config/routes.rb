@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resources :ips
 
     namespace :admin do
+      resources :activity_logs, only: :index
       resources :customers do
         resources :contacts
       end

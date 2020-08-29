@@ -34,9 +34,6 @@ class CustomersController < ApplicationController
   end
 
   def generate_zoom_url
-    # zoomのURLを生成して返す
-    # アクティビティのログを残す
-
     render json: { zoom_url: ZoomClient.generate_url(params.permit(:topic, :duration, :agenda)) }
   end
 
