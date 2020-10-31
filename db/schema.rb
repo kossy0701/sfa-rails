@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(version: 2020_08_28_112030) do
 
   create_table "activity_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "tenant_id", null: false
-    t.text "action", null: false
-    t.string "performer", null: false
-    t.string "performer_type", null: false
-    t.string "ip_address"
+    t.text "action", null: false, comment: "Behavior such as login is stored in json format."
+    t.string "performer", null: false, comment: "Store polymorphic related class names."
+    t.string "performer_type", null: false, comment: "Store polymorphic related class names."
+    t.string "ip_address", comment: "store remote_ip address in Ipv4 format."
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ip_address"], name: "index_activity_logs_on_ip_address"
