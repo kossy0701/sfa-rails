@@ -38,15 +38,13 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
 
-  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
-
   config.action_mailer.smtp_settings = {
-    user_name: Rails.application.credentials.sendgrid[:user_name],
-    password: Rails.application.credentials.sendgrid[:password],
-    domain: Rails.application.credentials.sendgrid[:domain],
     address: 'smtp.sendgrid.net',
     port: 587,
     authentication: :plain,
+    user_name: Rails.application.credentials.sendgrid[:user_name],
+    password: Rails.application.credentials.sendgrid[:api_key],
+    domain: Rails.application.credentials.sendgrid[:domain],
     enable_starttls_auto: true
   }
 
