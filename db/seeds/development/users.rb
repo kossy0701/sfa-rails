@@ -1,4 +1,6 @@
-0.upto(9) do |idx|
+tenants = Tenant.all
+
+0.upto(5) do |idx|
   gimei = Gimei.name
   sex = [:male, :female].sample
   gimei =
@@ -8,7 +10,7 @@
       Gimei.female
     end
   User.create(
-    tenant: Tenant.first,
+    tenant: tenants.sample,
     last_name: gimei.last.kanji,
     first_name: gimei.first.kanji,
     last_name_kana: gimei.last.katakana,
