@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2020_08_16_053728) do
     t.string "problem"
     t.string "improvement"
     t.string "consultation"
+    t.integer "status", default: 1, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_daily_reports_on_user_id"
