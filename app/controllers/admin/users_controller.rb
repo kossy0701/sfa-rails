@@ -2,7 +2,7 @@ require 'csv'
 
 class Admin::UsersController < Admin::Base
   def index
-    @users = current_user_tenant.users
+    @users = current_user_tenant.users.with_attached_image
   end
 
   def show
